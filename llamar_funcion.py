@@ -65,23 +65,29 @@ class MiVentana(QtWidgets.QDialog):
                 if nuevo_nombre in foto:
                     print(foto)
                     continue
-                if formato != '.PDF':
-                    x += 1
-                    foto2 = foto.split('.')
-                    foto3 = os.path.join(foto2[0]+formato)
-                    print(foto, foto2)
-                    os.rename(foto, foto3)
-                if formato == '.PDF':
-                    x += 1
-                    foto2 = foto.split('.')
-                    foto3 = os.path.join(foto2[0]+formato)
-                    image = Image.open(foto)
-                    pdf_bytes = img2pdf.convert(image.filename)
-                    file = open(foto3, "wb")
-                    file.write(pdf_bytes)
-                    image.close()
-                    file.close()
-                    os.remove(foto)
+                try:
+                    if formato != '.PDF':
+                        x += 1
+                        foto2 = foto.split('.')
+                        foto3 = os.path.join(foto2[0]+formato)
+                        print(foto, foto2)
+                        os.rename(foto, foto3)
+                except Exception as e:
+                    print('Error al renombrar la imagen:', e)
+                try:    
+                    if formato == '.PDF':
+                        x += 1
+                        foto2 = foto.split('.')
+                        foto3 = os.path.join(foto2[0]+formato)
+                        image = Image.open(foto)
+                        pdf_bytes = img2pdf.convert(image.filename)
+                        file = open(foto3, "wb")
+                        file.write(pdf_bytes)
+                        image.close()
+                        file.close()
+                        os.remove(foto)
+                except Exception as e:
+                    print('Error al convertir la imagen a PDF:', e)
 
 
         print(f"Proceso finalizado correctamente. Se han analizado {x} documentos")
